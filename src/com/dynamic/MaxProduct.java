@@ -3,37 +3,31 @@ package com.dynamic;
 /**
  * @ClassName MaxProduct
  * @Author Jacky
- * @Description
+ * @Description 给你一个整数数组 nums ，请你找出数组中乘积最大的连续子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。
+ * <p>
+ * 示例 1:
+ * 输入: [2,3,-2,4]
+ * 输出: 6
+ * 解释: 子数组 [2,3] 有最大乘积 6。
+ * <p>
+ * 示例 2:
+ * 输入: [-2,0,-1]
+ * 输出: 0
+ * 解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。
  **/
 public class MaxProduct {
     public int maxProduct(int[] nums) {
-        int length = nums.length;
-        if (length == 1) {
-            return nums[0];
+        int maxF = nums[0];
+        int minF = nums[0];
+        int result = maxF;
+        for (int i = 1; i < nums.length; i++) {
+            int num = nums[i];
+            int mx = maxF;
+            int mn = minF;
+            maxF = Math.max(mx * num, Math.max(mn * num, num));
+            minF = Math.min(mx * num, Math.min(mn * num, num));
+            result = Math.max(maxF, result);
         }
-        int[] f = new int[length];
-        computeF(f, nums);
-        return f[length - 1];
-    }
-
-    public void computeF(int[] f, int[] nums) {
-        int length = f.length;
-        f[0] = nums[0];
-        boolean flag = true;
-        for (int i = 1; i < length; i++) {
-            int temp = Math.max(nums[i], f[i - 1]);
-            if (flag) {
-                if (f[i - 1] * nums[i] >= temp) {
-                    f[i] = f[i - 1] * nums[i];
-                    flag = true;
-                } else {
-                    f[i] = temp;
-                    flag = false;
-                }
-            } else {
-                f[i] = temp;
-                flag = true;
-            }
-        }
+        return result;
     }
 }
